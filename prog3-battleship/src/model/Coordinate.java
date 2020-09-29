@@ -3,7 +3,7 @@ package model;
 import java.util.Arrays;
 
 /**
- *
+ * The Class Coordinate.
  * @auhor Alejandro Seguí Apellániz 48793265F
  * @version 11.0.8
  */

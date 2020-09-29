@@ -6,10 +6,10 @@ import model.Coordinate;
 
 public class MainP1 {
 	
- //Programa para crear la clase coordinate
+
 	public static void main(String[] args) {
 		
-		//Creamos coordenadas
+		
         Coordinate c1 = new Coordinate(0,0);
 	    Coordinate c2 = new Coordinate(10,10);
 	    Coordinate c3 = new Coordinate(4,3);
