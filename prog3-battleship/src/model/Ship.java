@@ -43,7 +43,6 @@ public class Ship {
 	 * @param s the s
 	 * @param n the n
 	 */
-	//SIN this
 	public Ship(Orientation o, char s, String n) {
 		this.o = orientation;
 		this.s = symbol;
