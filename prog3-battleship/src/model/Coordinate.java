@@ -6,7 +6,7 @@ import java.util.Set;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Coordinate.
+ * The Class Coordinate
  * @auhor Alejandro Seguí Apellániz 48793265F
  * @version 11.0.8
  */
