@@ -1,16 +1,19 @@
 package model;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class Coordinate
+ * The Class Coordinate.
  * @auhor Alejandro Seguí Apellániz 48793265F
  * @version 11.0.8
  */
 public class Coordinate {
 	
 	
-	/** The components.*/
+	/** The components. */
 	private int[] components;
 	
 	/**
@@ -147,6 +150,30 @@ public class Coordinate {
 		if (!Arrays.equals(components, other.components))
 			return false;
 		return true;
+	}
+	
+	/**
+	 * Copy.
+	 *
+	 * @return the coordinate
+	 */
+	public Coordinate copy() {
+		return new Coordinate(this);
+	}
+	
+	/**
+	 * Adjacent coordinates.
+	 *
+	 * @return the sets the
+	 */
+	public Set<Coordinate> adjacentCoordinates() {
+		Set<Coordinate> adyacentes = new HashSet<Coordinate>();
+		
+		adyacentes.add(new Coordinate(components[0] - 1, components[1] - 1));
+		adyacentes.add(new Coordinate(components[0] - 1, components[1]));
+		
+		
+		return adyacentes;
 	}
 
 }
