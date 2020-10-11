@@ -169,10 +169,14 @@ public class Coordinate {
 	public Set<Coordinate> adjacentCoordinates() {
 		Set<Coordinate> adyacentes = new HashSet<Coordinate>();
 		
-		adyacentes.add(new Coordinate(components[0] - 1, components[1] - 1));
-		adyacentes.add(new Coordinate(components[0] - 1, components[1]));
-		
-		
+		for(int i = components[0] - 1; i <= components[0] + 1; i++) {
+			for(int j = components[1] - 1; j <= components[1] + 1; j++) {
+				if(i != components[0] || j != components[1]) {
+					adyacentes.add(new Coordinate(i, j));
+				}
+				
+			}
+		}
 		return adyacentes;
 	}
 
