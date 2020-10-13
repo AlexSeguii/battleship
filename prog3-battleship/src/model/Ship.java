@@ -191,6 +191,15 @@ public class Ship {
 	}
 	
 	/**
+	 * Gets the orientation.
+	 *
+	 * @return the orientation
+	 */
+	public Orientation getOrientation() {
+		return orientation;
+	}
+	
+	/**
 	 * Gets the symbol.
 	 *
 	 * @return the symbol
