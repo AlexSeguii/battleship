@@ -80,7 +80,12 @@ public class Ship {
 	 * @return the position
 	 */
 	public Coordinate getPosition() {
-		return position.copy(); //COPIA DEFENSIVA
+		if(position == null) {
+			return null;
+		}
+		else {
+			return position.copy();
+		}
 	}
 	
 	
