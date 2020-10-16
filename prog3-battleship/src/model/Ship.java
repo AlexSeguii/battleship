@@ -211,14 +211,13 @@ public class Ship {
 	 */
 	public boolean isShotDown() {
 		boolean hundido = true;
-		int orientacion = orientation.ordinal();
 		
 		for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
 			for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
 				Coordinate aux = new Coordinate(x, y);
 				int index = getShapeIndex(aux);
 				
-				if(shape[orientacion][index] == CRAFT_VALUE) {
+				if(shape[orientation.ordinal()][index] == CRAFT_VALUE) {
 					hundido = false;
 				}
 			}
