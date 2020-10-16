@@ -161,7 +161,6 @@ public class Coordinate {
 		return new Coordinate(this);
 	}
 	
-	
 	/**
 	 * Adjacent coordinates.
 	 *
@@ -172,7 +171,7 @@ public class Coordinate {
 		
 		for(int i = components[0] - 1; i <= components[0] + 1; i++) {
 			for(int j = components[1] - 1; j <= components [1] + 1; j++) {
-				if(i != components[0] || j != components[1]) {
+				if(i != components[0] && j != components[1]) {
 					adyacentes.add(new Coordinate(i,j));
 				}
 			}
