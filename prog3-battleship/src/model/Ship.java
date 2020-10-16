@@ -3,177 +3,46 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Ship.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
+ */
 public class Ship {
-	private Coordinate position;
-	private Orientation orientation;
+	
+	/** The Constant BOUNDING_SQUARE_SIZE. */
 	private final static int BOUNDING_SQUARE_SIZE = 5;
+	
+	/** The Constant CRAFT_VALUE. */
 	private final static int CRAFT_VALUE = 1;
+	
+	/** The Constant HIT_VALUE. */
 	private final static int HIT_VALUE = -1;
+	
+	/** The position. */
+	private Coordinate position;
+	
+	/** The orientation. */
+	private Orientation orientation;
+	
+	/** The symbol. */
 	private char symbol;
+	
+	/** The name. */
 	private String name;
-	public Ship(Orientation o, char s, String n) {
-		orientation = o; // seleccionando la forma del barco.
-		// NORTH => fila 0 de shape
-		// EAST => fila 1 de shape
-		// SOUTH => fila 2 de shape
-		symbol = s;
-		name = n;
-		position = null;
-	}
-	public Orientation getOrientation() {
-		return orientation;
-	}
-	public Coordinate getPosition() {
-		// codigo uggly!
-		if(position == null) {
-			return null;
-		}
-		return position.copy();
-	}
-	public void setPosition(Coordinate position) {
-		this.position = new Coordinate(position);
-	}
-	public String getName() {
-		return name;
-	}
-	public int [][] getShape() {
-		return shape;
-	}
-	public int getShapeIndex(Coordinate c) {
-		return c.get(1)*BOUNDING_SQUARE_SIZE + c.get(0);
-	}
-	public Set<Coordinate> getAbsolutePositions(Coordinate position){
-		Set<Coordinate> cjto = new HashSet<Coordinate>();
-		int y, x, indice, orientacion;
-		
-		// comprobar que el barco este en el tablero.
-		if(position != null) {
-			orientacion = orientation.ordinal();
-			for(y = 0; y < BOUNDING_SQUARE_SIZE; y++) {
-				for(x = 0; x < BOUNDING_SQUARE_SIZE; x++) {
-					indice = getShapeIndex(new Coordinate(x, y));
-					if(shape[orientacion][indice] == CRAFT_VALUE || shape[orientacion][indice] == HIT_VALUE) {
-						cjto.add(new Coordinate(x, y).add(position));
-					}
-				}
-			}
-		}
-		return cjto;
-	}
-	public char getSymbol() {
-		return symbol;
-	}
-	public Set<Coordinate> getAbsolutePositions(){
-		return getAbsolutePositions(position); // llama al de arriba con la posicion actual de barco nazi.
-	}
 	
-	public boolean hit(Coordinate c) {
-		boolean tocado = false;
-		Coordinate relativa;
-		int indice, orientacion;
-		
-		Set<Coordinate> absolutas = getAbsolutePositions(); // posicones del barco en el tablero
-		if(absolutas.contains(c)) { // la posicion del disparo coincide con alguna de esas posiciones.
-			relativa = c.subtract(position);
-			indice = getShapeIndex(relativa);
-			orientacion = orientation.ordinal();
-			if(shape[orientacion][indice] == CRAFT_VALUE) {
-				shape[orientacion][indice] = HIT_VALUE;
-				tocado = true;
-			}
-		}
-		return tocado;
-	}
-	public boolean is_hit(Coordinate c) {
-		boolean tocado = false;
-		Coordinate relativa;
-		int indice, orientacion;
-		
-		Set<Coordinate> absolutas = getAbsolutePositions(); // posicones del barco en el tablero
-		if(absolutas.contains(c)) { // la posicion del disparo coincide con alguna de esas posiciones.
-			relativa = c.subtract(position);
-			indice = getShapeIndex(relativa);
-			orientacion = orientation.ordinal();
-			if(shape[orientacion][indice] == HIT_VALUE) {
-				tocado = true;
-			}
-		}
-		return tocado;
-	}
-	//  
-	public boolean isShotDown() {
-		boolean esta = false;
-		// tiene que haber algun CRAFT para no estar hundido
-		// o todas tienes que ser HIT
-		int orientacion = orientation.ordinal();
-		esta = true;
-		for(int i = 0; i < shape[orientacion].length && esta; i++) {
-			if(shape[orientacion][i] == CRAFT_VALUE) {
-				esta = false;
-			}
-		}
-		/*
-		esta = true;
-		for(int y = 0; y < BOUNDING_SQUARE_SIZE && esta; y++) {
-			for(int x = 0; x < BOUNDING_SQUARE_SIZE && esta; x++) {
-				Coordinate c = new Coordinate(x, y); // genera la coordenada
-				int indice = getShapeIndex(c); // para luego sacar el indice en el vector... :)
-				if(shape[orientacion][indice] == CRAFT_VALUE) {
-					esta = false;
-				}
-			}
-		}*/
-		return esta;
-	}
-	public String toString() {
-		StringBuilder gonsalico = new StringBuilder();
-		int indice, orientacion;
-		
-		orientacion = orientation.ordinal();
-		gonsalico.append(name + " (" + orientation.toString() + ")\n");
-		// cabecera---------------------------------------
-		gonsalico.append(" ");
-		for(int i = 1; i <= BOUNDING_SQUARE_SIZE; i++) {
-			gonsalico.append("-");
-		}
-		gonsalico.append("\n");
-		for(int y = 0; y < BOUNDING_SQUARE_SIZE; y++) {
-			gonsalico.append("|");
-			for(int x = 0; x < BOUNDING_SQUARE_SIZE; x++) {
-				indice = getShapeIndex(new Coordinate(x, y));
-				if(shape[orientacion][indice] == HIT_VALUE) {
-					gonsalico.append(Board.HIT_SYMBOL);
-				}
-				else {
-					if(shape[orientacion][indice] == CRAFT_VALUE) {
-						gonsalico.append(symbol);
-					}
-					else {
-						gonsalico.append(Board.WATER_SYMBOL);
-					}
-				}
-			}
-			gonsalico.append("|\n");
-		}
-		gonsalico.append(" ");
-		for(int i = 1; i <= BOUNDING_SQUARE_SIZE; i++) {
-			gonsalico.append("-");
-		}
-		//gonsalico.append("\n");
-		return gonsalico.toString();
-	}
-	
-	
-	private int shape[][] = new int[][] {		//     relativas		position		absolutas		
-        { 0, 0, 0, 0, 0,               // NORTH    ·····					
-          0, 0, 1, 0, 0,               //          ··#·· (2,1)			 (1,1)			(3,2)
-          0, 0, 1, 0, 0,               //          ··#·· (2,2)							(3,3)
-          0, 0, 1, 0, 0,               //          ..#.. (2,3)							(3,4)
+	/** The shape. */
+	private int shape[][] = new int[][] {
+        { 0, 0, 0, 0, 0,               // NORTH    ·····
+          0, 0, 1, 0, 0,               //          ··#··
+          0, 0, 1, 0, 0,               //          ··#··
+          0, 0, 1, 0, 0,               //          ..#..
           0, 0, 0, 0, 0},              //          ·····
 
         { 0, 0, 0, 0, 0,               // EAST     ·····
           0, 0, 0, 0, 0,               //          ·····
-          0, 1, 1, 1, 0,               //          ·###· (1,2)(2,2)(3,2)
+          0, 1, 1, 1, 0,               //          ·###·
           0, 0, 0, 0, 0,               //          ·····
           0, 0, 0, 0, 0},              //          ·····
 
@@ -187,8 +56,238 @@ public class Ship {
           0, 0, 0, 0, 0,               //          ·····
           0, 1, 1, 1, 0,               //          ·###·
           0, 0, 0, 0, 0,               //          ·····
-          0, 0, 0, 0, 0}};   
+          0, 0, 0, 0, 0}};             //          ·····
+          
+          
+	
+	/**
+	 * Instantiates a new ship.
+	 *
+	 * @param orientation the orientation
+	 * @param symbol the symbol
+	 * @param name the name
+	 */
+	public Ship(Orientation orientation, char symbol, String name) {
+		this.orientation = orientation;
+		this.symbol = symbol;
+		this.name = name;
+		
+		position = null;
+	}
+	
+	
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position
+	 */
+	public Coordinate getPosition() {
+		if(position != null) {
+			return position.copy();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Gets the shape index.
+	 *
+	 * @param c the c
+	 * @return the shape index
+	 */
+	public int getShapeIndex(Coordinate c) {
+		return c.get(1) * BOUNDING_SQUARE_SIZE + c.get(0);
+	}
+	
+	
+	/**
+	 * Gets the absolute positions.
+	 *
+	 * @param position the position
+	 * @return the absolute positions
+	 */
+	public Set<Coordinate> getAbsolutePositions(Coordinate position){
+		Set<Coordinate> absolute = new HashSet<Coordinate>();
+		
+		if(position != null) {
+			for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
+				for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
+					Coordinate aux = new Coordinate(x, y);
+					int posShape = getShapeIndex(aux);
+					if(shape[orientation.ordinal()][posShape] == HIT_VALUE || shape[orientation.ordinal()][posShape] == CRAFT_VALUE) {
+						absolute.add(aux.add(position));
+					}
+				}
+			}
+		}
+		return absolute;
+	}
+	
+	
+	/**
+	 * Gets the absolute positions.
+	 *
+	 * @return the absolute positions
+	 */
+	public Set<Coordinate> getAbsolutePositions(){
+		Set<Coordinate> s = getAbsolutePositions(position);
+		return s;
+	}
+	
+	
+	/**
+	 * Hit.
+	 *
+	 * @param c the c
+	 * @return true, if successful
+	 */
+	public boolean hit(Coordinate c) {
+		Set<Coordinate> absolutas = getAbsolutePositions();
+		boolean hited = false;
+		
+		if(absolutas.contains(c)) {
+			Coordinate relativa;
+			relativa = c.subtract(position);
+			
+			int poshape = getShapeIndex(relativa);
+			
+			if(shape[orientation.ordinal()][poshape] == CRAFT_VALUE) {
+				shape[orientation.ordinal()][poshape] = HIT_VALUE;
+				hited = true;
+			}
+		}
+		return hited;
+	}
+	
+	/**
+	 * Sets the position.
+	 *
+	 * @param position the new position
+	 */
+	public void setPosition(Coordinate position) {
+		this.position = new Coordinate(position);
+	}
+	
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Gets the shape.
+	 *
+	 * @return the shape
+	 */
+	public int [][] getShape() {
+		return shape;
+	}
+	
+	/**
+	 * Gets the orientation.
+	 *
+	 * @return the orientation
+	 */
+	public Orientation getOrientation() {
+		return orientation;
+	}
+	
+	/**
+	 * Gets the symbol.
+	 *
+	 * @return the symbol
+	 */
+	public char getSymbol() {
+		return symbol;
+	}
+	
+	/**
+	 * Checks if is shot down.
+	 *
+	 * @return true, if is shot down
+	 */
+	public boolean isShotDown() {
+		boolean hundido = true;
+		int orientacion = orientation.ordinal();
+		
+		for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
+			for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
+				Coordinate aux = new Coordinate(x, y);
+				int index = getShapeIndex(aux);
+				
+				if(shape[orientacion][index] == CRAFT_VALUE) {
+					hundido = false;
+				}
+			}
+		}
+		return hundido;
+	}
+	
+	/**
+	 * Checks if is hit.
+	 *
+	 * @param c the c
+	 * @return true, if is hit
+	 */
+	public boolean isHit(Coordinate c) {
+		boolean alcanzado = false;
+		Set<Coordinate> absolutes = getAbsolutePositions();
+		
+		if(absolutes.contains(c)) {
+			Coordinate relativa = c.subtract(position);
+			int poshape = getShapeIndex(relativa);
+			
+			if(shape[orientation.ordinal()][poshape] == HIT_VALUE) {
+				alcanzado = true;
+			}
+		}
+		return alcanzado;
+	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
+	public String toString() {
+		StringBuilder sb ;
+		sb = new StringBuilder();
+		
+		sb.append(name + " (" + orientation.toString() + ")\n");
+		sb.append(" ");
+		
+		for(int i=1; i <= BOUNDING_SQUARE_SIZE; i++) {
+			sb.append("-");
+		}
+		
+		sb.append("\n");
+		for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
+			sb.append("|");
+			for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
+				int poshape = getShapeIndex(new Coordinate(x, y));
+				if(shape[orientation.ordinal()][poshape] == CRAFT_VALUE) {
+					sb.append(symbol);
+				}
+				else {
+					if(shape[orientation.ordinal()][poshape] == HIT_VALUE) {
+						sb.append(Board.HIT_SYMBOL);
+					}
+					else {
+						sb.append(Board.WATER_SYMBOL);
+					}
+				}
+			}
+			sb.append("|\n");
+		}
+		
+		sb.append(" ");
+		
+		for(int j=1; j <= BOUNDING_SQUARE_SIZE; j++) {
+			sb.append("-");
+		}
+		return sb.toString();
+	}
 }
-
-
-
