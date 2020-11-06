@@ -1,24 +1,24 @@
 package model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-// TODO: Auto-generated Javadoc
+import model.exceptions.CoordinateAlreadyHitException;
+
 /**
- * The Class Ship.
- * @auhor Alejandro Seguí Apellániz 48793265F
- * @version 11.0.8
+ * The Class Craft.
  */
-public class Ship {
+public abstract class Craft {
 	
 	/** The Constant BOUNDING_SQUARE_SIZE. */
-	private final static int BOUNDING_SQUARE_SIZE = 5;
+	private static final int BOUNDING_SQUARE_SIZE = 5;
 	
 	/** The Constant CRAFT_VALUE. */
-	private final static int CRAFT_VALUE = 1;
+	private static final int CRAFT_VALUE = 1;
 	
 	/** The Constant HIT_VALUE. */
-	private final static int HIT_VALUE = -1;
+	private static final int HIT_VALUE = -1;
 	
 	/** The position. */
 	private Coordinate position;
@@ -33,49 +33,23 @@ public class Ship {
 	private String name;
 	
 	/** The shape. */
-	private int shape[][] = new int[][] {
-        { 0, 0, 0, 0, 0,               // NORTH    ·····
-          0, 0, 1, 0, 0,               //          ··#··
-          0, 0, 1, 0, 0,               //          ··#··
-          0, 0, 1, 0, 0,               //          ..#..
-          0, 0, 0, 0, 0},              //          ·····
+	protected int shape[][];
 
-        { 0, 0, 0, 0, 0,               // EAST     ·····
-          0, 0, 0, 0, 0,               //          ·····
-          0, 1, 1, 1, 0,               //          ·###·
-          0, 0, 0, 0, 0,               //          ·····
-          0, 0, 0, 0, 0},              //          ·····
-
-        { 0, 0, 0, 0, 0,               // SOUTH    ·····
-          0, 0, 1, 0, 0,               //          ··#··
-          0, 0, 1, 0, 0,               //          ··#··
-          0, 0, 1, 0, 0,               //          ..#..
-          0, 0, 0, 0, 0},              //          ·····
-
-        { 0, 0, 0, 0, 0,               // WEST     ·····
-          0, 0, 0, 0, 0,               //          ·····
-          0, 1, 1, 1, 0,               //          ·###·
-          0, 0, 0, 0, 0,               //          ·····
-          0, 0, 0, 0, 0}};             //          ·····
-          
-          
-	
 	/**
-	 * Instantiates a new ship.
+	 * Instantiates a new craft.
 	 *
 	 * @param orientation the orientation
 	 * @param symbol the symbol
 	 * @param name the name
 	 */
-	public Ship(Orientation orientation, char symbol, String name) {
+	public Craft(Orientation orientation, char symbol, String name) {
 		this.orientation = orientation;
 		this.symbol = symbol;
 		this.name = name;
 		
 		position = null;
 	}
-	
-	
+
 	/**
 	 * Gets the position.
 	 *
@@ -85,10 +59,11 @@ public class Ship {
 		if(position != null) {
 			return position.copy();
 		}
-		return null;
+		else {
+			return null;
+		}
 	}
-	
-	
+
 	/**
 	 * Gets the shape index.
 	 *
@@ -96,56 +71,61 @@ public class Ship {
 	 * @return the shape index
 	 */
 	public int getShapeIndex(Coordinate c) {
-		return c.get(1) * BOUNDING_SQUARE_SIZE + c.get(0);
+		Objects.requireNonNull(c);
+		int indice = 0;
+		indice = c.get(0) + c.get(1) * BOUNDING_SQUARE_SIZE;
+		return indice;
 	}
-	
-	
+
 	/**
 	 * Gets the absolute positions.
 	 *
 	 * @param position the position
 	 * @return the absolute positions
 	 */
-	public Set<Coordinate> getAbsolutePositions(Coordinate position){
+	public Set<Coordinate> getAbsolutePositions(Coordinate position) {
+		Objects.requireNonNull(position);
 		Set<Coordinate> absolute = new HashSet<Coordinate>();
+		int x, y;
 		
 		if(position != null) {
-			for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
-				for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
-					Coordinate aux = new Coordinate(x, y);
-					int posShape = getShapeIndex(aux);
-					if(shape[orientation.ordinal()][posShape] == HIT_VALUE || shape[orientation.ordinal()][posShape] == CRAFT_VALUE) {
-						absolute.add(aux.add(position));
-					}
+			for(int k = 0; k < BOUNDING_SQUARE_SIZE * BOUNDING_SQUARE_SIZE; k++) {
+				y = k / BOUNDING_SQUARE_SIZE;
+				x = k % BOUNDING_SQUARE_SIZE;
+				if(shape[orientation.ordinal()][k] == HIT_VALUE || shape[orientation.ordinal()][k] == CRAFT_VALUE ) {
+					absolute.add(position.add(CoordinateFactory.createCoordinate(x, y)));
 				}
 			}
 		}
 		return absolute;
 	}
-	
-	
+
 	/**
 	 * Gets the absolute positions.
 	 *
 	 * @return the absolute positions
 	 */
-	public Set<Coordinate> getAbsolutePositions(){
+	public Set<Coordinate> getAbsolutePositions() {
 		Set<Coordinate> s = getAbsolutePositions(position);
 		return s;
 	}
-	
-	
+
 	/**
 	 * Hit.
 	 *
 	 * @param c the c
 	 * @return true, if successful
+	 * @throws CoordinateAlreadyHitException the coordinate already hit exception
 	 */
-	public boolean hit(Coordinate c) {
-		Set<Coordinate> absolutas = getAbsolutePositions();
+	public boolean hit(Coordinate c) throws CoordinateAlreadyHitException {
 		boolean hited = false;
+		Objects.requireNonNull(c);
 		
+		Set<Coordinate> absolutas = getAbsolutePositions();
 		if(absolutas.contains(c)) {
+			if(isHit(c)) {
+				throw new CoordinateAlreadyHitException(c);
+			}
 			Coordinate relativa;
 			relativa = c.subtract(position);
 			
@@ -156,17 +136,19 @@ public class Ship {
 				hited = true;
 			}
 		}
+	
 		return hited;
 	}
-	
+
 	/**
 	 * Sets the position.
 	 *
 	 * @param position the new position
 	 */
 	public void setPosition(Coordinate position) {
-		this.position = new Coordinate(position);
+		this.position = position.copy();
 	}
+
 	
 	/**
 	 * Gets the name.
@@ -176,15 +158,16 @@ public class Ship {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Gets the shape.
 	 *
 	 * @return the shape
 	 */
 	public int [][] getShape() {
-		return shape;
+		return shape.clone();
 	}
+
 	
 	/**
 	 * Gets the orientation.
@@ -194,7 +177,7 @@ public class Ship {
 	public Orientation getOrientation() {
 		return orientation;
 	}
-	
+
 	/**
 	 * Gets the symbol.
 	 *
@@ -203,7 +186,7 @@ public class Ship {
 	public char getSymbol() {
 		return symbol;
 	}
-	
+
 	/**
 	 * Checks if is shot down.
 	 *
@@ -212,19 +195,19 @@ public class Ship {
 	public boolean isShotDown() {
 		boolean hundido = true;
 		
-		for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
-			for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
-				Coordinate aux = new Coordinate(x, y);
-				int index = getShapeIndex(aux);
-				
-				if(shape[orientation.ordinal()][index] == CRAFT_VALUE) {
+		if(position != null) { 
+			for(int i = 0; i < shape[orientation.ordinal()].length && hundido == true; i++) {
+				if(shape[orientation.ordinal()][i] == CRAFT_VALUE) {
 					hundido = false;
 				}
 			}
 		}
+		else {
+			hundido = false;
+		}
 		return hundido;
 	}
-	
+
 	/**
 	 * Checks if is hit.
 	 *
@@ -233,19 +216,21 @@ public class Ship {
 	 */
 	public boolean isHit(Coordinate c) {
 		boolean alcanzado = false;
-		Set<Coordinate> absolutes = getAbsolutePositions();
 		
-		if(absolutes.contains(c)) {
-			Coordinate relativa = c.subtract(position);
-			int poshape = getShapeIndex(relativa);
-			
-			if(shape[orientation.ordinal()][poshape] == HIT_VALUE) {
-				alcanzado = true;
+		if(position != null) {
+			Set<Coordinate> absolutes = getAbsolutePositions();
+			if(absolutes.contains(c)) {
+				Coordinate relativa = c.subtract(position);
+				int poshape = getShapeIndex(relativa);
+				
+				if(shape[orientation.ordinal()][poshape] == HIT_VALUE) {
+					alcanzado = true;
+				}
 			}
 		}
 		return alcanzado;
 	}
-	
+
 	/**
 	 * To string.
 	 *
@@ -266,7 +251,7 @@ public class Ship {
 		for(int y=0; y < BOUNDING_SQUARE_SIZE; y++) {
 			sb.append("|");
 			for(int x=0; x < BOUNDING_SQUARE_SIZE; x++) {
-				int poshape = getShapeIndex(new Coordinate(x, y));
+				int poshape = getShapeIndex(CoordinateFactory.createCoordinate(x, y));
 				if(shape[orientation.ordinal()][poshape] == CRAFT_VALUE) {
 					sb.append(symbol);
 				}
@@ -289,4 +274,5 @@ public class Ship {
 		}
 		return sb.toString();
 	}
+
 }

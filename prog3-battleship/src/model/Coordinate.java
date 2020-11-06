@@ -1,31 +1,22 @@
 package model;
+import java.util.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class Coordinate
+ * The Class Coordinate.
  * @auhor Alejandro Seguí Apellániz 48793265F
  * @version 11.0.8
  */
-public class Coordinate {
-	
-	
+public abstract class Coordinate {
 	/** The components. */
 	private int[] components;
 	
 	/**
 	 * Instantiates a new coordinate.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param dim the dim
 	 */
-	public Coordinate(int x, int y) {
-		components = new int [2];
-		components[0] = x;
-		components[1] = y;
+	protected Coordinate(int dim) {
+		components = new int[dim];
 	}
 	
 	/**
@@ -33,7 +24,7 @@ public class Coordinate {
 	 *
 	 * @param c the c
 	 */
-	public Coordinate(Coordinate c) {
+	protected Coordinate(Coordinate c) {
 		int dim = c.components.length;
 		components = new int [dim];
 		
@@ -48,12 +39,12 @@ public class Coordinate {
 	 * @param component the component
 	 * @param value the value
 	 */
-	protected void set(int component, int value) {
+	public void set(int component, int value) {
 		if (component >= 0 && component < components.length) {
 			components[component] = value;
 		}
 		else
-			System.err.println("Error in Coordinate.set, component " + component + " is out of range");
+			throw new IllegalArgumentException("Componente fuera de rango");
 	}
 	
 	/**
@@ -67,9 +58,8 @@ public class Coordinate {
 			return components[component];
 		}
 		else 
-			System.err.println("Error in Coordinate.get, component " + component + " is out of range");
+			throw new IllegalArgumentException("Componente fuera de rango");
 		
-		return -1;
 	}
 	
 	/**
@@ -79,9 +69,10 @@ public class Coordinate {
 	 * @return the coordinate
 	 */
 	public Coordinate add(Coordinate c) {
-		Coordinate total = new Coordinate(this);
+		Objects.requireNonNull(c);
+		Coordinate total = copy();
 		
-		for(int i = 0; i<c.components.length; i++) {
+		for(int i = 0; i < total.components.length && i < c.components.length; i++) {
 			total.set(i, total.get(i) + c.get(i));
 		}
 		return total;
@@ -94,29 +85,13 @@ public class Coordinate {
 	 * @return the coordinate
 	 */
 	public Coordinate subtract(Coordinate c) {
-		Coordinate total = new Coordinate(this);
+		Objects.requireNonNull(c);
+		Coordinate total = copy();
 		
-		for(int i = 0; i < c.components.length; i++) {
+		for(int i = 0; i < total.components.length && i < c.components.length; i++) {
 			total.set(i, total.get(i) - c.get(i));
 		}
 		return total;
-	}
-	
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
-	public String toString() {
-		StringBuilder concatenation = new StringBuilder();
-		concatenation.append("(");
-		for (int i = 0; i < components.length; i++){
-			concatenation.append(components[i]);
-			if(i < components.length - 1)
-				concatenation.append(", ");
-		}
-		concatenation.append(")");
-		return concatenation.toString();
 	}
 	
 	/**
@@ -157,27 +132,14 @@ public class Coordinate {
 	 *
 	 * @return the coordinate
 	 */
-	public Coordinate copy() {
-		return new Coordinate(this);
-	}
+	public abstract Coordinate copy();
 	
 	/**
 	 * Adjacent coordinates.
 	 *
 	 * @return the sets the
 	 */
-	public Set<Coordinate> adjacentCoordinates() {
-		Set<Coordinate> adyacentes = new HashSet<Coordinate>();
-		
-		for(int i = components[0] - 1; i <= components[0] + 1; i++) {
-			for(int j = components[1] - 1; j <= components [1] + 1; j++) {
-				if(i != components[0] && j != components[1]) {
-					adyacentes.add(new Coordinate(i,j));
-				}
-			}
-		}
-		return adyacentes;
-	}
+	public abstract Set<Coordinate> adjacentCoordinates();
 
 }
 
