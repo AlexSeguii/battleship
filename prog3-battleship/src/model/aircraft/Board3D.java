@@ -8,6 +8,8 @@ import model.Craft;
 
 /**
  * The Class Board3D.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
 public class Board3D extends Board {
 	

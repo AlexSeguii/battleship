@@ -5,6 +5,8 @@ import model.Orientation;
 
 /**
  * The Class Bomber.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
 public class Bomber extends Aircraft {
 	

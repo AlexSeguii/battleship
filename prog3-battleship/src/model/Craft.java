@@ -8,11 +8,13 @@ import model.exceptions.CoordinateAlreadyHitException;
 
 /**
  * The Class Craft.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
 public abstract class Craft {
 	
 	/** The Constant BOUNDING_SQUARE_SIZE. */
-	private static final int BOUNDING_SQUARE_SIZE = 5;
+	public static final int BOUNDING_SQUARE_SIZE = 5;
 	
 	/** The Constant CRAFT_VALUE. */
 	private static final int CRAFT_VALUE = 1;

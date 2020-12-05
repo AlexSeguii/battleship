@@ -5,8 +5,10 @@ import model.Coordinate;
 
 /**
  * The Class OccupiedCoordinateException.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
-public class OccupiedCoordinateException extends BattleshipException {
+public class OccupiedCoordinateException extends CoordinateException {
 	
 	/**
 	 * Instantiates a new occupied coordinate exception.

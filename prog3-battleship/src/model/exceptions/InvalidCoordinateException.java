@@ -5,8 +5,10 @@ import model.Coordinate;
 
 /**
  * The Class InvalidCoordinateException.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
-public class InvalidCoordinateException extends BattleshipException {
+public class InvalidCoordinateException extends CoordinateException {
 	
 	/**
 	 * Instantiates a new invalid coordinate exception.

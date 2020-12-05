@@ -1,31 +1,12 @@
 package model.exceptions;
 
-import model.Coordinate;
 
 
 /**
  * The Class BattleshipException.
+ * @auhor Alejandro Seguí Apellániz 48793265F
+ * @version 11.0.8
  */
 public abstract class BattleshipException extends Exception {
 	
-	/** The c. */
-	private Coordinate c;
-	
-	/**
-	 * Instantiates a new battleship exception.
-	 *
-	 * @param c the c
-	 */
-	public BattleshipException(Coordinate c) {
-		this.c = c;
-	}
-	
-	/**
-	 * Gets the message.
-	 *
-	 * @return the message
-	 */
-	public String getMessage() {
-		return "Error: " + c.toString();
-	}
 }
