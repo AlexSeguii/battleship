@@ -9,38 +9,39 @@ import model.exceptions.OccupiedCoordinateException;
 import model.exceptions.io.BattleshipIOException;
 import model.io.IPlayer;
 import model.io.IVisualiser;
+import model.score.CraftScore;
+import model.score.HitScore;
 
 
-/**
- * The Class Game.
- * @auhor Alejandro Seguí Apellániz 48793265F
- * @version 11.0.8
- */
+
 public class Game {
 	
-	/** The game started. */
 	private boolean gameStarted;
-	
-	/** The next to shoot. */
 	private int nextToShoot;
-	
-	/** The shoot counter. */
 	private int shootCounter;
-	
-	/** The player 2. */
 	private IPlayer player1, player2;
-	
-	/** The board 2. */
 	private Board board1, board2;
+	private HitScore hitScore1;	
+	private HitScore hitScore2;
+	private CraftScore craftScore1;
+	private CraftScore craftScore2;
 	
-	/**
-	 * Instantiates a new game.
-	 *
-	 * @param b1 the b 1
-	 * @param b2 the b 2
-	 * @param p1 the p 1
-	 * @param p2 the p 2
-	 */
+	public HitScore getHitScorePlayer1() {
+		return hitScore1;
+	}
+	
+	public HitScore getHitScorePlayer2() {
+		return hitScore2;
+	}
+	
+	public CraftScore getCraftScorePlayer1() {
+		return craftScore1;
+	}
+	
+	public CraftScore getCraftScorePlayer2() {
+		return craftScore2;
+	}
+	
 	public Game(Board b1, Board b2, IPlayer p1, IPlayer p2) {
 		Objects.requireNonNull(b1);
 		Objects.requireNonNull(b2);
@@ -56,6 +57,10 @@ public class Game {
 		shootCounter = 0;
 		
 		gameStarted = false;
+		hitScore1 = new HitScore(p1);
+		craftScore1 = new CraftScore(p1);
+		hitScore2 = new HitScore(p2);
+		craftScore2 = new CraftScore(p2);
 	}
 	
 	/**
@@ -149,11 +154,6 @@ public class Game {
 		return end;
 	}
 	
-	/**
-	 * Play next.
-	 *
-	 * @return true, if successful
-	 */
 	public boolean playNext() {
 		Coordinate cord = null;
 		boolean lineas = false;
@@ -266,6 +266,18 @@ public class Game {
 		}
 		
 		return output;
+	}
+	
+	public String getScoreInfo() {
+		String s = "";
+		s += "Player 1\n";
+		s += "HitScore: " + hitScore1 + "\n";
+		s += "CraftScore: " + craftScore1 + "\n";
+		s += "--------------\n";
+		s += "Player 2\n";
+		s += "HitScore: " + hitScore2 + "\n";
+		s += "CraftScore: " + craftScore2;
+		return s;
 	}
 	
 }

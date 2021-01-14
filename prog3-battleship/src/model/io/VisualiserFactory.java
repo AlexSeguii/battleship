@@ -1,6 +1,11 @@
 package model.io;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import model.Craft;
 import model.Game;
+import model.Orientation;
 
 
 /**
@@ -18,13 +23,32 @@ public class VisualiserFactory {
 	 * @return the i visualiser
 	 */
 	public static IVisualiser createVisualiser(String n, Game g) {
-		switch(n) {
-			case "Console":
-				return new VisualiserConsole(g);
-			case "GIF":
-				return new VisualiserGIF(g);
-			default:
-				return null;
+		IVisualiser nave = null;
+		Constructor<?> c = null;
+		Class<?> clase = null;
+		
+		try {
+			clase = Class.forName("model.io.Visualiser" + n);
 		}
+		catch (ClassNotFoundException e) {}
+			
+		if(clase != null) {
+			Class<?> [] arg = {Game.class};
+			
+			try {
+				c = clase.getDeclaredConstructor(arg);
+				Object [] parametros = {g};
+				try {
+					nave = (IVisualiser) c.newInstance(parametros);
+				}
+				catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				}
+			} 
+			catch (NoSuchMethodException e) {
+			} 
+			catch (SecurityException e) {
+			}
+		}
+		return nave;
 	}
 }

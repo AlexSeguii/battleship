@@ -37,5 +37,7 @@ public class Cruiser extends Ship {
 		    	0, 0, 0, 0, 0,
 		    	0, 0, 0, 0, 0}};
 	}
-
+	public int getValue() {
+		return 5;
+	}
 }

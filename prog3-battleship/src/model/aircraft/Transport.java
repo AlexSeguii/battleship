@@ -39,4 +39,7 @@ public class Transport extends Aircraft {
 		    	0, 0, 1, 0, 0,
 		    	0, 0, 0, 1, 0}};
 	}
+	public int getValue() {
+		return 18;
+	}
 }

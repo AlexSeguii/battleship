@@ -4,31 +4,22 @@ import model.aircraft.Coordinate3D;
 import model.ship.Coordinate2D;
 
 
-/**
- * A factory for creating Coordinate objects.
- * @auhor Alejandro Seguí Apellániz 48793265F
- * @version 11.0.8
- */
 public class CoordinateFactory {
-	
-	/**
-	 * Creates a new Coordinate object.
-	 *
-	 * @param coords the coords
-	 * @return the coordinate
-	 */
 	public static Coordinate createCoordinate(int... coords) {
-		if(coords.length == 2) {
-			return new Coordinate2D(coords[0], coords[1]);
+		Coordinate c = null;
+		if(coords.length > 3|| coords.length < 2 ) {
+			throw new IllegalArgumentException("Error en las coordenadas");
 		}
 		else {
-			if(coords.length == 3) {
-				return new Coordinate3D(coords[0], coords[1], coords[2]);
+			if(coords.length == 2) {
+				c = new Coordinate2D(coords[0], coords[1]);
 			}
 			else {
-				throw new IllegalArgumentException();
+				c = new Coordinate3D(coords[0], coords[1], coords[2]);
 			}
 		}
+		return c;
 	}
-
 }
+
+

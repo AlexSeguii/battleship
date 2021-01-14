@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import model.Board;
+import model.CellStatus;
 import model.Coordinate;
 import model.CoordinateFactory;
 import model.Craft;
@@ -16,25 +17,12 @@ import model.exceptions.NextToAnotherCraftException;
 import model.exceptions.OccupiedCoordinateException;
 import model.exceptions.io.BattleshipIOException;
 
-/**
- * The Class PlayerFile.
- * @auhor Alejandro Seguí Apellániz 48793265F
- * @version 11.0.8
- */
+
 public class PlayerFile implements IPlayer {
-	
-	/** The br. */
+	private CellStatus lastShotStatus;
 	private BufferedReader br;
-	
-	/** The name. */
 	private String name;
 	
-	/**
-	 * Instantiates a new player file.
-	 *
-	 * @param name the name
-	 * @param reader the reader
-	 */
 	public PlayerFile(String name, BufferedReader reader) {
 		Objects.requireNonNull(reader);
 		this.name = name;
@@ -50,16 +38,7 @@ public class PlayerFile implements IPlayer {
 	public String getName() {
 		return name + " (PlayerFile)";
 	}
-
-	/**
-	 * Put crafts.
-	 *
-	 * @param b the b
-	 * @throws InvalidCoordinateException the invalid coordinate exception
-	 * @throws OccupiedCoordinateException the occupied coordinate exception
-	 * @throws NextToAnotherCraftException the next to another craft exception
-	 * @throws BattleshipIOException the battleship IO exception
-	 */
+	
 	@Override
 	public void putCrafts(Board b) throws InvalidCoordinateException, OccupiedCoordinateException, NextToAnotherCraftException, BattleshipIOException {
 		Craft craft;
@@ -108,28 +87,19 @@ public class PlayerFile implements IPlayer {
 		}
 	}
 
-	/**
-	 * Next shoot.
-	 *
-	 * @param b the b
-	 * @return the coordinate
-	 * @throws BattleshipIOException the battleship IO exception
-	 * @throws InvalidCoordinateException the invalid coordinate exception
-	 * @throws CoordinateAlreadyHitException the coordinate already hit exception
-	 */
 	@Override
 	public Coordinate nextShoot(Board b) throws BattleshipIOException, InvalidCoordinateException, CoordinateAlreadyHitException {
 		int i,j,k;
 		String[] tr;
 		String line;
 		Coordinate c = null;
-		Coordinate readed = null;
 		
+		lastShotStatus = null;
 		try {
 			line = br.readLine();
 			if(line != null) {
 				tr = line.split("\\s+");
-				if(tr[0].equals("exit") == false && tr[0].equals("shoot") == false ) {
+				if(!tr[0].equals("shoot") && !tr[0].equals("exit")) {
 					throw new BattleshipIOException("Error ");
 				}
 				else {
@@ -149,7 +119,7 @@ public class PlayerFile implements IPlayer {
 							default:
 								throw new BattleshipIOException("Error");
 						}
-						b.hit(c);
+						lastShotStatus = b.hit(c);
 					}
 				}
 			}
@@ -161,7 +131,10 @@ public class PlayerFile implements IPlayer {
 		catch (IOException e) {
 			throw new BattleshipIOException("ERROR");
 		}
-		return readed;
+		return c;
+	}
+	public CellStatus getLastShotStatus() {
+		return lastShotStatus;
 	}
 
 }

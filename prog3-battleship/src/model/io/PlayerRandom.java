@@ -3,6 +3,7 @@ package model.io;
 import java.util.Random;
 
 import model.Board;
+import model.CellStatus;
 import model.Coordinate;
 import model.CoordinateFactory;
 import model.Craft;
@@ -17,25 +18,12 @@ import model.exceptions.OccupiedCoordinateException;
 import model.ship.Board2D;
 
 
-/**
- * The Class PlayerRandom.
- * @auhor Alejandro Seguí Apellániz 48793265F
- * @version 11.0.8
- */
+
 public class PlayerRandom implements IPlayer {
-	
-	/** The random. */
 	private Random random;
-	
-	/** The name. */
 	private String name;
+	private CellStatus lastShotStatus;
 	
-	/**
-	 * Instantiates a new player random.
-	 *
-	 * @param name the name
-	 * @param seed the seed
-	 */
 	public PlayerRandom(String name, long seed) {
 		this.name = name;
 		random = new Random(seed);
@@ -58,44 +46,44 @@ public class PlayerRandom implements IPlayer {
 	 */
 	@Override
 	public void putCrafts(Board b) {
-		int total;
-		String[] crafts = {"Battleship", "Carrier", "Cruiser", "Destroyer", "Bomber", "Fighter", "Transport"};
-		if((b instanceof Board3D) == false) {
-			total = 4;
+		String [] scrafts = {	"ship.Battleship", 
+								"ship.Carrier", 
+								"ship.Cruiser", 
+								"ship.Destroyer", 
+								"aircraft.Bomber", 
+								"aircraft.Fighter", 
+								"aircraft.Transport"};
+		Orientation random;
+		Coordinate coordinate;
+		Craft craft;
+		int intentos, limite;
+		if(!(b instanceof Board3D)) {
+			limite = 4;
 		}
 		else {
-			total = crafts.length;
+			limite = scrafts.length;
 		}
-		for(int x=0; x<total;x++) {
-			int aux = 1;
-			Orientation or = Orientation.values()[genRandomInt(0, Orientation.values().length)];
-			Craft craft = CraftFactory.createCraft(crafts[x], or);
-			
-			while(aux <= 100) {
-				Coordinate cord = genRandomCoordinate(b, Craft.BOUNDING_SQUARE_SIZE);
+		for(int i = 0; i < limite; i++) {
+			intentos = 1;
+			random = Orientation.values()[genRandomInt(0, Orientation.values().length)];
+			craft = CraftFactory.createCraft(scrafts[i], random);
+			while(intentos <= 100){
+				coordinate = genRandomCoordinate(b, Craft.BOUNDING_SQUARE_SIZE);
 				try {
-					b.addCraft(craft, cord);
+					b.addCraft(craft, coordinate);
 					break;
-				}
-				catch(OccupiedCoordinateException | NextToAnotherCraftException | InvalidCoordinateException e) {
-					aux++;
+				} catch (InvalidCoordinateException | OccupiedCoordinateException | NextToAnotherCraftException e) {
+					intentos++;	
 				}
 			}
 		}
 	}
-
-	/**
-	 * Next shoot.
-	 *
-	 * @param b the b
-	 * @return the coordinate
-	 * @throws InvalidCoordinateException the invalid coordinate exception
-	 * @throws CoordinateAlreadyHitException the coordinate already hit exception
-	 */
+	
 	@Override
-	public Coordinate nextShoot(Board b) throws InvalidCoordinateException, CoordinateAlreadyHitException {
-		Coordinate c = genRandomCoordinate(b, 0);
-		b.hit(c);		
+	public Coordinate nextShoot(Board b) throws InvalidCoordinateException, CoordinateAlreadyHitException{
+		Coordinate c = genRandomCoordinate(b, 0); // la coordenada esta dentro del tablero si o si.
+		lastShotStatus = null;
+		lastShotStatus = b.hit(c);		
 		return c;
 	}
 	
@@ -131,5 +119,10 @@ public class PlayerRandom implements IPlayer {
 			c = CoordinateFactory.createCoordinate(i, j, k);
 		}	
 		return c;
+	}
+
+	@Override
+	public CellStatus getLastShotStatus() {
+		return lastShotStatus;
 	}
 }

@@ -16,10 +16,10 @@ public abstract class Craft {
 	/** The Constant BOUNDING_SQUARE_SIZE. */
 	public static final int BOUNDING_SQUARE_SIZE = 5;
 	
-	/** The Constant CRAFT_VALUE. */
+	// indica que aun no le hemos dado
 	private static final int CRAFT_VALUE = 1;
 	
-	/** The Constant HIT_VALUE. */
+	// indica que has disparado sobre esa celda
 	private static final int HIT_VALUE = -1;
 	
 	/** The position. */
@@ -276,5 +276,5 @@ public abstract class Craft {
 		}
 		return sb.toString();
 	}
-
+	public abstract int getValue();
 }
