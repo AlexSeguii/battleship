@@ -1,7 +1,7 @@
 # Battleship — Juego de Batalla Naval (Java)
 
 [![Made with Java](https://img.shields.io/badge/Language-Java-blue?logo=java)](https://www.java.com) <!-- badge -->
-[![Status](https://img.shields.io/badge/status-WIP-orange)](#)
+
 
 ---
 
