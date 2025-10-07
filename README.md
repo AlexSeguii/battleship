@@ -26,8 +26,8 @@
 ---
 
 
-## Futuras ideas de mejora 
+## Futuras mejoras
 
-* 🔲 Implementar IA adversaria con niveles de dificultad.
-* 🔲 Interfaz gráfica con JavaFX o Swing.
-* 🔲 Modo multijugador por red (sockets) o vía WebSocket.
+*  Implementar IA adversaria con niveles de dificultad.
+*  Mejorar interfaz gráfica.
+*  Modo multijugador por red (sockets) o vía WebSocket.
