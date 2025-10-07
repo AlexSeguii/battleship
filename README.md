@@ -34,8 +34,3 @@
 * 🔲 Modo multijugador por red (sockets) o vía WebSocket.
 
 ---
-
-
-
-## Créditos
-ç
