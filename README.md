@@ -9,7 +9,7 @@
 
 ![Battleship — película](https://www.accioncine.es/wp-content/uploads/2012/03/battleship-TR.jpg)
 
-> 🎯 **Resumen rápido**: *Battleship* es una implementación en Java del clásico juego "Hundir la Flota". Pensado como proyecto didáctico y demostración de buenas prácticas en programación orientada a objetos.
+> 🎯 **Resumen**: *Battleship* es una implementación en Java del clásico juego "Hundir la Flota". Pensado como proyecto didáctico y demostración de buenas prácticas en programación orientada a objetos.
 
 ---
 
