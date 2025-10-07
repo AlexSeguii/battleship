@@ -32,5 +32,3 @@
 * 🔲 Implementar IA adversaria con niveles de dificultad.
 * 🔲 Interfaz gráfica con JavaFX o Swing.
 * 🔲 Modo multijugador por red (sockets) o vía WebSocket.
-
----
